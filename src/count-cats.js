@@ -1,10 +1,58 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function countCats( matrix ){
-  return matrix.reduce( (totalEars, currentValue) => totalEars + currentValue.filter( currentValueFilter => currentValueFilter === '^^').length, 0);
+  
+  let result = 0;
+
+  for (let i = 0; i < matrix.length; i = i + 1){
+    if (matrix[i] === '^^'){
+    result = result + 1;
+    }
+  }
+  return result
+  
 }
 
-// Шаг 1) Используем метод .reduce() для данного массива, чтобы вывести финальное единое значение.
+
+
+// matrix[i] === matrix
+
+// ### **Сосчитай котов!**
+
+// Ваша задача — сосчитать котов, спрятавшихся на заднем дворе (представленном в виде двумерного массива, `Array`). Коты прячутся хорошо, но их **ушки** (`"^^"`) видны очень хорошо. Ваша задача — реализовать функцию `countCats(backyard)`, которая сосчитает котов. Удачи!
+
+// Число найденных котов должно иметь тип `number`. Если коты не найдены, функция должна вернуть `0`.
+
+// Например:
+
+// `countCats([
+//     [0, 1, '^^'],
+//     [0, '^^', 2],
+//     ['^^', 1, 2]
+//   ]) => 3`
+
+// Напишите ваш код в `src/count-cats.js`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// module.exports = function countCats( matrix ){
+//   return matrix.reduce( (totalEars, currentValue) => totalEars + currentValue.filter( currentValueFilter => currentValueFilter === '^^').length, 0);
+// }
+// // Шаг 1) Используем метод .reduce() для данного массива, чтобы вывести финальное единое значение.
 
 // Метод .reduce() - принимает два параметра:
 
