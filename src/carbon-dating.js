@@ -9,7 +9,6 @@ module.exports = function dateSample( sampleActivity) {
   // we also exclude any inadequate 'sampleActivity' which is more than 15 or less than 0
   if (!sampleActivity || sampleActivity <= 0 || sampleActivity > 15 || typeof sampleActivity !== String) return false;
 
-  
   // approximate age of the sample is calculated by measuring the ratio of the modern activity of the C14 isotope to the activity of the same isotope in the sample.
   // that is why we divide MODERN_ACTIVITY and sampleActivity
   let logarithm = Math.log(MODERN_ACTIVITY / sampleActivity);

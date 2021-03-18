@@ -27,7 +27,7 @@ module.exports = function createDreamTeam(members) {
 
 
 
-}}
+}
 //     let temp = firstLetterOfName(elem);
 //     dreamTeam+=temp==-1 ? '' : temp;
 //   }
