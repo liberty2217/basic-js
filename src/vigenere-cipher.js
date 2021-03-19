@@ -1,122 +1,72 @@
 const CustomError = require("../extensions/custom-error");
-
+const letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M',
+                'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+console.log(letter.length)
 class VigenereCipheringMachine {
-  constructor(direction = false) {
-    this.direction = direction;
-    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  }
-  encrypt(encrStr, key) {
-    console.log(key);
-    console.log(encrStr);
+  constructor(direct = true) {this.direction = direct;}
+  
+  encrypt(message, key) {
 
-    if(encrStr == undefined || key == undefined) throw new Error;
-    encrStr = encrStr.toUpperCase().split('');
-    let res = [];
-    key = key.toUpperCase().split(' ').join('').split('');
- 
-    
-    let symbols = [];
-    let symbolsPositions = [];
-    
-    for (let j = 0; j < encrStr.length; j++) {
-      if (encrStr[j] == ' ') {
-        symbols.push(encrStr[j]);
-        symbolsPositions.push(j);
-        encrStr.splice( j, 1 );
-        j--;
-      } else if (!((encrStr[j]).match(/[A-Z]/))) {
-        symbols.push(encrStr[j]);
-        symbolsPositions.push(j);
-        encrStr.splice( j, 1 );
-        j--;
+    if (arguments.length <= 1) throw new Error("Incorrect arguments");
+    message = message.toUpperCase().split(''); 
+    key = key.toUpperCase();
+    let arrMess = [], arrKey = [], arrEncr = [];
+    const keyLength = key.length;
+
+    let count = 0;
+    for (let i=0; i<message.length; i++) {
+      arrKey.push(letter.indexOf(key[count]));
+      if (letter.indexOf(message[i]) === -1) {
+        arrKey.push(letter.indexOf(key[count])); 
+        i++; 
       }
-    }
-    if (encrStr.length > key.length) {
-      let iterations = encrStr.length - key.length;
-      for (let i = 0; i < iterations; i++) {
-        key.push(key[i]);
-      }
-    } else if (encrStr.length < key.length) {
-      let num = key.length - encrStr.length;
-      key.splice(key.length - num, num);
+      count++;
+      if (count===keyLength) count=0;
     }
 
-    for (let k = 0; k < encrStr.length; k++) {
-      let index = this.alphabet.indexOf(encrStr[k]) + this.alphabet.indexOf(key[k]);
-      if (index >= this.alphabet.length) {
-        index -= this.alphabet.length;
-        res.push(this.alphabet[index]);
-      } else {
-        res.push(this.alphabet[index]);
+    for (let i=0; i<message.length; i++) {
+      arrMess.push(letter.indexOf(message[i]));
+      if (arrMess[i] !== -1) {
+        arrEncr.push(arrMess[i] + arrKey[i]);
+        if (arrEncr[i]>25) {arrEncr[i] -= 26;}
+        arrEncr[i] = letter[arrEncr[i]];
       }
+      else arrEncr.push(message[i]);
     }
-    let correction = 0;
-    
-    for (let m = 0; symbols.length > m; m++) {
-      res.splice((symbolsPositions[m] + correction), 0, symbols[m]);
-      correction++
-    }
-    
-    return this.direction ? res.reverse().join('') : res.join('');
+    if(!this.direction) arrEncr.reverse();
+    return arrEncr.join('');
   }   
 
+  decrypt(message, key) {
 
+    if (arguments.length <= 1) throw new Error("Incorrect arguments");
+    message = message.toUpperCase().split(''); 
+    key = key.toUpperCase();
+    let arrMess = [], arrKey = [], arrEncr = [];
+    const keyLength = key.length;
 
-
-
-  decrypt(decrStr, key) {
-    console.log(key);
-    console.log(decrStr);
-    
-    decrStr = decrStr.toUpperCase().split('');
-    let res = [];
-    key = key.toUpperCase().split(' ').join('').split('');
- 
-    
-    let symbols = [];
-    let symbolsPositions = [];
-    
-    for (let j = 0; j < decrStr.length; j++) {
-      if (decrStr[j] == ' ') {
-        symbols.push(decrStr[j]);
-        symbolsPositions.push(j);
-        decrStr.splice( j, 1 );
-        j--;
-      } else if (!((decrStr[j]).match(/[A-Z]/))) {
-        symbols.push(decrStr[j]);
-        symbolsPositions.push(j);
-        decrStr.splice( j, 1 );
-        j--;
+    let count = 0;
+    for (let i=0; i<message.length; i++) {
+      arrKey.push(letter.indexOf(key[count]));
+      if (letter.indexOf(message[i]) === -1) {
+        arrKey.push(letter.indexOf(key[count])); 
+        i++; 
       }
+      count++;
+      if (count===keyLength) count=0;
     }
-    if (decrStr.length > key.length) {
-      let iterations = decrStr.length - key.length;
-      for (let i = 0; i < iterations; i++) {
-        key.push(key[i]);
+    
+    for (let i=0; i<message.length; i++) {
+      arrMess.push(letter.indexOf(message[i]));
+      if (arrMess[i] !== -1) {
+        arrEncr.push(arrMess[i] - arrKey[i]);
+        if (arrEncr[i]<0 ) {arrEncr[i] += 26;}
+        arrEncr[i] = letter[arrEncr[i]];
       }
-    } else if (decrStr.length < key.length) {
-      let num = key.length - decrStr.length;
-      key.splice(key.length - num, num);
+      else arrEncr.push(message[i]);
     }
-
-    for (let k = 0; k < decrStr.length; k++) {
-      let index = this.alphabet.indexOf(decrStr[k]) - this.alphabet.indexOf(key[k]);
-      if (index < 0) {
-        index += this.alphabet.length;
-        res.push(this.alphabet[index]);
-      } else {
-        res.push(this.alphabet[index]);
-      }
-    }
-
-    let correction = 0;
-    for (let m = 0; symbols.length > m; m++) {
-      res.splice((symbolsPositions[m] + correction), 0, symbols[m]);
-      correction++
-    }
-
-    return this.direction ? res.reverse().join('') : res.join('');
+    if(!this.direction) arrEncr.reverse();
+    return arrEncr.join('');
   }
 }
-
 module.exports = VigenereCipheringMachine;
